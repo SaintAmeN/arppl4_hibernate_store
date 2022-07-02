@@ -1,6 +1,6 @@
 package pl.sda.arppl4.hibernatestore.parser;
 
-import pl.sda.arppl4.hibernatestore.dao.ProductDao;
+import pl.sda.arppl4.hibernatestore.dao.GenericDao;
 import pl.sda.arppl4.hibernatestore.model.Product;
 import pl.sda.arppl4.hibernatestore.model.ProductUnit;
 
@@ -15,11 +15,11 @@ public class ProductCommandLineParser {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private final Scanner scanner;
-    private final ProductDao dao;
+    private final GenericDao<Product> dao;
 
-    public ProductCommandLineParser(Scanner scanner, ProductDao dao) {
+    public ProductCommandLineParser(Scanner scanner, GenericDao<Product> daoP) {
         this.scanner = scanner;
-        this.dao = dao;
+        this.dao = daoP;
     }
 
     public void parse() {
@@ -45,7 +45,7 @@ public class ProductCommandLineParser {
         System.out.println("Provide id of the product You'd like to update:");
         Long id = scanner.nextLong();
 
-        Optional<Product> productOptional = dao.zwrocProduct(id);
+        Optional<Product> productOptional = dao.znajdzPoId(id, Product.class);
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
 
@@ -73,7 +73,7 @@ public class ProductCommandLineParser {
                     System.out.println("Field with this name is not handled.");
             }
 
-            dao.updateProduct(product);
+            dao.aktualizuj(product);
             System.out.println("Product has been updated.");
         } else {
             System.out.println("Product not found");
@@ -84,10 +84,10 @@ public class ProductCommandLineParser {
         System.out.println("Provide id of the product You'd like to remove:");
         Long id = scanner.nextLong();
 
-        Optional<Product> productOptional = dao.zwrocProduct(id);
+        Optional<Product> productOptional = dao.znajdzPoId(id, Product.class);
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
-            dao.usunProduct(product);
+            dao.usun(product);
 
             System.out.println("Product removed");
         } else {
@@ -96,7 +96,7 @@ public class ProductCommandLineParser {
     }
 
     private void handleListCommand() {
-        List<Product> productList = dao.zwrocListeProducts();
+        List<Product> productList = dao.list(Product.class);
         for (Product product : productList) {
             System.out.println(product);
         }
@@ -122,7 +122,7 @@ public class ProductCommandLineParser {
         ProductUnit productUnit = loadProductUnitFromUser();
 
         Product product = new Product(null, name, price, producent, expiryDate, quantity, productUnit);
-        dao.dodajProduct(product);
+        dao.dodaj(product);
     }
 
     private ProductUnit loadProductUnitFromUser() {
