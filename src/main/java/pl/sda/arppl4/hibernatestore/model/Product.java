@@ -1,9 +1,6 @@
 package pl.sda.arppl4.hibernatestore.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,5 +21,7 @@ public class Product {
     private String producent;
     private LocalDate expiryDate;
     private Double quantity;
-    private ProductUnit unit; // FIXME: nie działam dobrze...
+
+    @Enumerated(EnumType.STRING)
+    private ProductUnit unit;
 }

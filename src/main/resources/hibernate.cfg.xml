@@ -9,6 +9,11 @@
         <property name="connection.username">root</property>
         <property name="connection.password">root</property>
 
+        <!-- Generuje tabele i kolumny w bazie danych -->
+        <!-- Update - przyrost - jeśli brakuje kolumny lub tabeli, dodaj ją -->
+        <!-- Create - usunie bazę danych przed uruchomieniem i postawi ją od zera na nowo -->
+        <!-- Create-Drop -postawi ją od zera na nowo i przed zamknięciem programu usunie ją -->
+        <!-- Validate - nic nie robi -->
         <property name="hibernate.hbm2ddl.auto">update</property>
 
         <!-- DB schema will be updated if needed -->
